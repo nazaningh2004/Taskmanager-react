@@ -1,19 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import AddTask from './components/AddTask';
 import TaskList from './components/TaskList';
 import FilterTask from './components/FilterTask';
-
-type Task = {
-  id: number;
-  text: string;
-  completed: boolean;
-};
+import type { Task } from './Task';
 
 function App() {
-  const [taskList, setTasks] = useState<Task[]>([]);
+  const [taskList, setTasks] = useState<Task[]>(() => {
+    const saved = localStorage.getItem('tasks');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
   const [filter, setFilter] = useState<string>('all');
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(taskList));
+  }, [taskList]);
 
   const filteredTasks = taskList.filter((task) => {
     if (filter === 'completed') return task.completed;
@@ -29,7 +31,6 @@ function App() {
     };
     setTasks([...taskList, newTask]);
   };
-
   const toggleTask = (id: number) => {
     setTasks(
       taskList.map((task) =>
@@ -37,6 +38,7 @@ function App() {
       )
     );
   };
+
   //filter:new array
   const deleteTask = (id: number) => {
     setTasks(taskList.filter((task) => task.id !== id));
@@ -49,6 +51,8 @@ function App() {
     );
     setEditingTaskId(null);
   };
+  const onCancelEdit = () => setEditingTaskId(null);
+
   return (
     <div className="container">
       <div className="box">
@@ -62,6 +66,7 @@ function App() {
           onEdit={(id) => setEditingTaskId(id)}
           editingTaskId={editingTaskId}
           onSaveEdit={updateTask}
+          onCancelEdit={onCancelEdit}
         />
       </div>
     </div>

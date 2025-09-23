@@ -1,3 +1,4 @@
+import Button from './Button';
 type FilterTaskprops = {
   filter: string;
   setFilter: (filter: string) => void;
@@ -6,24 +7,24 @@ type FilterTaskprops = {
 const FilterTask = ({ filter, setFilter }: FilterTaskprops) => {
   return (
     <div className="filters">
-      <button
+      <Button
         onClick={() => setFilter('all')}
         className={filter === 'all' ? 'active' : ''}
       >
         All
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={() => setFilter('completed')}
         className={filter === 'completed' ? 'active' : ''}
       >
         Completed
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={() => setFilter('incomplete')}
         className={filter === 'incomplete' ? 'active' : ''}
       >
         Incomplete
-      </button>
+      </Button>
     </div>
   );
 };

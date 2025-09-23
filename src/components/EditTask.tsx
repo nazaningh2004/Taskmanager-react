@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Button from './Button';
+
 type EditTaskProps = {
   initialText: string;
   onSave: (newText: string) => void;
@@ -22,10 +24,10 @@ const EditTask = ({ initialText, onSave, onCancel }: EditTaskProps) => {
         onChange={(e) => setNewText(e.target.value)}
         autoFocus
       />
-      <button type="submit">Save</button>
-      <button type="button" onClick={onCancel}>
+      <Button type="submit">Save</Button>
+      <Button type="button" onClick={onCancel}>
         Cancel
-      </button>
+      </Button>
     </form>
   );
 };

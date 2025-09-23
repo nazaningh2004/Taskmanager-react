@@ -1,9 +1,6 @@
 import EditTask from './EditTask';
-type Task = {
-  id: number;
-  text: string;
-  completed: boolean;
-};
+import type { Task } from '../Task';
+import TaskItemView from './TaskItem';
 
 type TaskListProps = {
   tasks: Task[];
@@ -12,6 +9,7 @@ type TaskListProps = {
   onEdit: (id: number) => void;
   editingTaskId: number | null;
   onSaveEdit: (id: number, newText: string) => void;
+  onCancelEdit: () => void;
 };
 
 const TaskList = ({
@@ -21,30 +19,34 @@ const TaskList = ({
   onEdit,
   editingTaskId,
   onSaveEdit,
+  onCancelEdit,
 }: TaskListProps) => {
   return (
     <ul className="style">
-      {tasks.map((task) => (
-        <li key={task.id} className={task.completed ? 'checked' : ''}>
-          {editingTaskId === task.id ? (
-            <EditTask
-              initialText={task.text}
-              onSave={(newText: string) => onSaveEdit(task.id, newText)}
-              onCancel={() => onEdit(-1)}
-            />
-          ) : (
-            <>
-              <button
-                className="checklist-btn"
-                onClick={() => onToggle(task.id)}
-              ></button>
-              <span>{task.text}</span>
-              <button onClick={() => onEdit(task.id)}>✏️</button>
-              <button onClick={() => onDelete(task.id)}>❌</button>
-            </>
-          )}
-        </li>
-      ))}
+      {tasks.length === 0 ? (
+        <p className="no-tasks-message">No tasks here!</p>
+      ) : (
+        <>
+          {tasks.map((task) => (
+            <li key={task.id}>
+              {editingTaskId === task.id ? (
+                <EditTask
+                  initialText={task.text}
+                  onSave={(newText: string) => onSaveEdit(task.id, newText)}
+                  onCancel={onCancelEdit}
+                />
+              ) : (
+                <TaskItemView
+                  task={task}
+                  onToggle={onToggle}
+                  onDelete={onDelete}
+                  onEdit={onEdit}
+                />
+              )}
+            </li>
+          ))}
+        </>
+      )}
     </ul>
   );
 };

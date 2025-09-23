@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 type AddTaskProps = {
   onAdd: (text: string) => void;
 };
